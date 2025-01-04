@@ -1,4 +1,5 @@
 import pygame
+import sys, os
 from pygame import mixer
 
 
@@ -30,7 +31,7 @@ BLUE = (0, 0, 255)
 GRAY = (170, 170, 170)
 
 #Menu Buttons
-BUTTON_WIDTH = 300
+BUTTON_WIDTH = 400
 BUTTON_HEIGHT = 100
 
 #Menus
@@ -43,22 +44,17 @@ details_screen_message = f"""
 Project: Tic-Tac-Toe Game with Pygame
 Created by: Fantonos
 
-
 Details: 
 A simple Python script that allows you to play Tic-Tac-Toe with a friend or against a bot. 
 It includes a GUI created with Pygame.
 
-
-Frame Rate: 60 FPS 
+Frame Rate: 60 FPS  
 Window Dimensions: {SCREEN_WIDTH} x {SCREEN_HEIGHT}
 
 Players:
 {player1} and {player2}
 
-
-This is my first project developed independently, 
-without external project management assistance.
-
+This is my first project developed independently, without external project management assistance.
 
 Contact Information:
 GitHub: https://github.com/Fantonos
@@ -72,8 +68,9 @@ current_screen = start_screen
 pygame.font.init()
 font = pygame.font.SysFont(None, 500)
 button_font = pygame.font.SysFont("Arial", 50)
-details_button_font = pygame.font.SysFont("Arial", 30)
+details_button_font = pygame.font.SysFont("Arial", 36)
 Large_button_font = pygame.font.SysFont("Arial", 84) 
+FONT = pygame.font.Font(None, 36)
 
 
 # Gameboard spots
@@ -84,19 +81,26 @@ wining_spots = {"Win 1": ["A1", "A2", "A3"], "Win 2": ["B1", "B2", "B3"], "Win 3
                 "Win 8": ["A1", "B2", "C3"], "Win 9": ["A3", "B2", "C1"]}
 
 #Sound:
+def resource(relative_path):
+    base_path = getattr(
+        sys,
+        '_MEIPASS',
+        os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 mixer.init()
-buble_sound_file = pygame.mixer.Sound('media/bubble_clap.mp3')
-player_sound1 = pygame.mixer.Sound('media/player_clap_1.mp3')
-player_sound2 = pygame.mixer.Sound('media/player_clap_2.mp3')
-menu_sound = pygame.mixer.Sound('media/menu_sounds.mp3')
+buble_sound_file = pygame.mixer.Sound(resource('media/bubble_clap.mp3'))
+player_sound1 = pygame.mixer.Sound(resource('media/player_clap_1.mp3'))
+player_sound2 = pygame.mixer.Sound(resource('media/player_clap_2.mp3'))
+menu_sound = pygame.mixer.Sound(resource('media/menu_sounds.mp3'))
 
 buble_sound_file.set_volume(0.1)
 player_sound1.set_volume(0.1)
 player_sound2.set_volume(0.1)
 menu_sound.set_volume(0.1)
 
-curser_icon_X = pygame.image.load('media/X.png').convert_alpha()
-curser_icon_0 = pygame.image.load('media/O.png').convert_alpha()
+curser_icon_X = pygame.image.load(resource('media/X.png')).convert_alpha()
+curser_icon_0 = pygame.image.load(resource('media/O.png')).convert_alpha()
 
 curser_icon_X = pygame.transform.scale(curser_icon_X, (100, 100))
 curser_icon_0 = pygame.transform.scale(curser_icon_0, (100, 100))
