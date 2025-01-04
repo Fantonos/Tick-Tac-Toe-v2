@@ -15,13 +15,9 @@ class Menu:
         self.button3_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, 450 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1000, BUTTON_HEIGHT))
         self.button4_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, 560 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1000, BUTTON_HEIGHT))
         
-        self.large_text_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, -500 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1000, BUTTON_HEIGHT + 10))
-        self.small_text_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, -390 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1000, BUTTON_HEIGHT))
-    # Load fonts and set sizes
-    
-    # Render the text surfaces
+        self.large_text_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, -500 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1100, BUTTON_HEIGHT + 10))
+        self.small_text_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, -390 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1100, BUTTON_HEIGHT))
 
-                                              
     def draw_menu(self):
         screen.fill(WHITE)
            
@@ -32,17 +28,15 @@ class Menu:
         pygame.draw.rect(screen, BLACK, self.button4_rect)  
         pygame.draw.rect(screen, BLACK, self.large_text_rect) 
         pygame.draw.rect(screen, BLACK, self.small_text_rect) 
-        
 
-        
         # Render the text for the buttons
         pvp_text = button_font.render("Player Vs Player", True, WHITE)
         pve_text = button_font.render("Player Vs Bot", True, WHITE)
         help_text = button_font.render("Details", True, WHITE)
         quit_text = button_font.render("Quit", True, WHITE)
         
-        large_text = Large_button_font.render('Tick Tac Toe', True, WHITE)
-        small_text = details_button_font.render('Made by Fantonos', True, WHITE)
+        large_text = Large_button_font.render('    Tick Tac Toe', True, WHITE)
+        small_text = details_button_font.render('      Made by Fantonos', True, WHITE)
        
         # Get the text rects to center them in the buttons
         pvp_text_rect = pvp_text.get_rect(center=self.button1_rect.center)
@@ -71,28 +65,32 @@ class Menu:
             constants.game_over = False
             constants.current_screen = game_screen
             return 
-            
+
+
         elif self.button2_rect.collidepoint(mouse_pos):
             menu_sound.play()
             constants.bot_active = True
             GameBoard.draw_grid(self)
             constants.current_screen = game_screen
             constants.game_over = False
-            
+
+
         elif self.button3_rect.collidepoint(mouse_pos):
             menu_sound.play()
             constants.current_screen = details_screen
-            #main_menu.draw_menu()
-            
+
+
         elif self.button4_rect.collidepoint(mouse_pos):
             menu_sound.play()
-            quit()
+            sys.exit()
+            #quit()
         
 class GameBoard:
     
     def __init__(self):
         self.board = [[None for _ in range(BOARD_COLS)] for _ in range(BOARD_ROWS)]
-    
+
+
     def draw_grid(self):
         #Draw the Tic-Tac-Toe grid on the screen.
         screen.fill(WHITE)
@@ -100,7 +98,8 @@ class GameBoard:
             pygame.draw.line(screen, BLACK, (col * CELL_SIZE, 0), (col * CELL_SIZE, SCREEN_HEIGHT), LINE_WIDTH)
         for row in range(1, BOARD_ROWS): # Draw horizontal lines
             pygame.draw.line(screen, BLACK, (0, row * CELL_SIZE), (SCREEN_WIDTH, row * CELL_SIZE), LINE_WIDTH)
-        
+
+
     def draw_symbol(self, row, col, player):
         #Draw 'X' or 'O' on the board in the correct position.
         if self.check_played_spot(row, col, player) == True:
@@ -164,7 +163,6 @@ class GameBoard:
         while True:
             current_time = pygame.time.get_ticks()
             self.check_win(player1)
-            #print(self.check_win(player1))
             if current_time - start_time >= 500:
                 self.draw_symbol(random.randint(0, 2), random.randint(0, 2), constants.player2)
                 break
@@ -234,21 +232,22 @@ class DetailsScreen:
         self.end_message_rect = pygame.Rect((.5 * SCREEN_WIDTH // 4 - BUTTON_WIDTH // 2, -600 + SCREEN_HEIGHT // 2 - BUTTON_HEIGHT // 2), (BUTTON_WIDTH + 1000, BUTTON_HEIGHT + 900))
 
     def draw_menu(self):
-        screen.fill(WHITE)
+        screen.fill(BLACK)
 
-        pygame.draw.rect(screen, BLACK, self.end_button2_rect)
-        pygame.draw.rect(screen, BLACK, self.end_message_rect)
+        pygame.draw.rect(screen, WHITE, self.end_button2_rect)
+        render_text(screen, details_screen_message, (20, 20), details_button_font, WHITE)
+        #pygame.draw.rect(screen, BLACK, self.end_message_rect)
 
-        m_text = button_font.render("Main Menu", True, WHITE)
-        e_text = details_button_font.render(details_screen_message, True, WHITE)
+        m_text = button_font.render("Main Menu", True, BLACK)
+        #e_text = details_button_font.render(details_screen_message, True, WHITE)
        
         # Get the text rects to center them in the buttons
         main_menu = m_text.get_rect(center=self.end_button2_rect.center)
-        end_text = e_text.get_rect(center=self.end_message_rect.center)
+        #end_text = e_text.get_rect(center=self.end_message_rect.center)
 
         # Draw the text onto the buttons
         screen.blit(m_text, main_menu)
-        screen.blit(e_text, end_text)
+        #screen.blit(e_text, end_text)
 
     def check_end_button_click(self, mouse_pos):
         if self.end_button2_rect.collidepoint(mouse_pos):
@@ -257,7 +256,7 @@ class DetailsScreen:
             return game_screen
         constants.current_screen = details_screen
         return details_screen
-  
+
 
 def reset_status():
     global spots_played_list
@@ -278,5 +277,10 @@ def play_sound():
     else:
         buble_sound_file.play()
 
-
-#Bellow can be deleted 
+def render_text(surface, text, pos, font, color):
+    lines = text.strip().split("\n")
+    x, y = pos
+    for line in lines:
+        rendered_line = font.render(line, True, color)
+        surface.blit(rendered_line, (x, y))
+        y += font.get_height() + 5  # Line spacing
